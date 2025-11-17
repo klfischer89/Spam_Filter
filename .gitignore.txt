@@ -1,1 +1,2 @@
 /data/Spam-Emails
+data\Spam-Emails
