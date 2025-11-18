@@ -28,17 +28,22 @@ def get_email_content(path):
         content = email_parts[1]
         return content
 
-spam_path = "./data/Spam-Emails/spam/"    
-spam_contents = []
-
-for f in os.listdir(spam_path):
+def read_emails(folder):
+    contents = []
+    for f in os.listdir(folder):
     # build path to an email
-    complete_path = spam_path + f    
-    # check if path is folder, if it is skip it
-    if os.path.isdir(complete_path):
-        continue
-    # get content for this mail
-    email_content = get_email_content(complete_path)
-    # if mail has content, append it to the list
-    if email_content != None:
-        spam_contents.append(email_content)
+        complete_path = folder + "/" + f    
+        # check if path is folder, if it is skip it
+        if os.path.isdir(complete_path):
+            continue
+        # get content for this mail
+        email_content = get_email_content(complete_path)
+        # if mail has content, append it to the list
+        if email_content != None:
+            contents.append(email_content)
+    return contents        
+
+
+spam_path = read_emails("./data/Spam-Emails/spam")
+ham_path = read_emails("./data/Spam-Emails/easy_ham")
+
