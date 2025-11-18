@@ -44,6 +44,15 @@ def read_emails(folder):
     return contents        
 
 
-spam_path = read_emails("./data/Spam-Emails/spam")
-ham_path = read_emails("./data/Spam-Emails/easy_ham")
+spam_contents = read_emails("./data/Spam-Emails/spam")
+ham_contents = read_emails("./data/Spam-Emails/easy_ham")
 
+def email_is_spam(content):
+    word = "dollar"
+    if content.count(word):
+        return False
+    else:
+        return True
+    
+spam_detected = [int(email_is_spam(c)) for c in spam_contents]    
+print(spam_detected)
