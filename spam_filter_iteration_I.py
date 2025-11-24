@@ -48,11 +48,21 @@ spam_contents = read_emails("./data/Spam-Emails/spam")
 ham_contents = read_emails("./data/Spam-Emails/easy_ham")
 
 def email_is_spam(content):
-    word = "dollar"
-    if content.count(word):
-        return False
-    else:
+    if content.lower().count("million") != 0:
         return True
+    elif content.lower().count("please") >= 2:
+        return True
+    elif content.lower().count("offer") != 0:
+        return True
+    elif content.lower().count("dollar") != 0:
+        return True
+    elif content.lower().count("service") != 0:
+        return True
+    else:
+        return False
     
-spam_detected = [int(email_is_spam(c)) for c in spam_contents]    
-print(spam_detected)
+spam_detected = [int(email_is_spam(c)) for c in spam_contents]   
+ham_spam_detected = [int(email_is_spam(c)) for c in ham_contents]
+
+print(sum(spam_detected)/len(spam_detected))
+print(sum(ham_spam_detected)/len(ham_spam_detected))
