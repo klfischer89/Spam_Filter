@@ -1,5 +1,9 @@
 import os # import os package
 import zipfile # import zipfile package
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.model_selection import train_test_split
+
 
 os.listdir("./data") # list files in data folder
 
@@ -47,22 +51,36 @@ def read_emails(folder):
 spam_contents = read_emails("./data/Spam-Emails/spam")
 ham_contents = read_emails("./data/Spam-Emails/easy_ham")
 
-def email_is_spam(content):
-    if content.lower().count("million") != 0:
-        return True
-    elif content.lower().count("please") >= 2:
-        return True
-    elif content.lower().count("offer") != 0:
-        return True
-    elif content.lower().count("dollar") != 0:
-        return True
-    elif content.lower().count("service") != 0:
-        return True
-    else:
-        return False
-    
-spam_detected = [int(email_is_spam(c)) for c in spam_contents]   
-ham_spam_detected = [int(email_is_spam(c)) for c in ham_contents]
+X = spam_contents + ham_contents
+y = [1] * 500 + [0] * 2500
 
-print(sum(spam_detected)/len(spam_detected))
-print(sum(ham_spam_detected)/len(ham_spam_detected))
+X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = 0.75)
+
+cv = CountVectorizer(max_df = 0.4, min_df = 0.075)
+cv.fit(X_train)
+
+model = MultinomialNB()
+model.fit(cv.transform(X_train), y_train)
+
+print(model.score(cv.transform(X_train), y_train))
+print(model.score(cv.transform(X_test), y_test))
+
+# def email_is_spam(content):
+#     if content.lower().count("million") != 0:
+#         return True
+#     elif content.lower().count("please") >= 2:
+#         return True
+#     elif content.lower().count("offer") != 0:
+#         return True
+#     elif content.lower().count("dollar") != 0:
+#         return True
+#     elif content.lower().count("service") != 0:
+#         return True
+#     else:
+#         return False
+    
+# spam_detected = [int(email_is_spam(c)) for c in spam_contents]   
+# ham_spam_detected = [int(email_is_spam(c)) for c in ham_contents]
+
+# print(sum(spam_detected)/len(spam_detected))
+# print(sum(ham_spam_detected)/len(ham_spam_detected))
